@@ -1,0 +1,26 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  annotations:
+    camel.apache.org/operator.id: camel-k
+  creationTimestamp: null
+  name: custom-catalog-integration
+spec:
+  sources:
+  - content: |-
+      <?xml version="1.0" encoding="UTF-8"?>
+      <routes xmlns="http://camel.apache.org/schema/spring">
+      <route>
+          <from uri="servlet-custom:testt?chunked=true&amp;httpMethodRestrict=GET&amp;httpBinding=handlingHttpBinding"/>
+          <toD uri="direct:1ff34788-2e6a-49ae-9e70-7718e71c868c"/>
+      </route>
+      <route>
+          <from uri="direct:1ff34788-2e6a-49ae-9e70-7718e71c868c"/>
+          <log message="Log message here: sdfsdfsdf1" />
+      </route>
+      </routes>
+    name: custom-catalog-integration.xml
+  traits:
+    kamelets:
+      enabled: false
+status: {}
