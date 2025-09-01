@@ -1,0 +1,34 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  annotations:
+    camel.apache.org/operator.id: camel-k
+  creationTimestamp: null
+  name: log-secret.xml
+spec:
+  sources:
+  - content: |-
+      <?xml version="1.0" encoding="UTF-8"?>
+      <routes xmlns="http://camel.apache.org/schema/spring">
+          <route>
+              <from uri="quartz://default-group/108df167-260b-473a-a3de-17de692cf7e9-12800e1a-29f9-44bf-84fc-8a6ec07e6841?cron=0 */1 * ? * *&amp;deleteJob=false"/>
+              <toD uri="direct:e28bc341-4fe5-44ba-8357-9da8121bea65"/>
+          </route>
+          <route>
+              <from uri="direct:e28bc341-4fe5-44ba-8357-9da8121bea65"/>
+              <setHeader name="secretHeader">
+                  <simple>resource:classpath:command</simple>
+              </setHeader>
+              <log message="Log message here: ${header.secretHeader}" /> 
+          </route>
+      </routes>
+    name: log-secret.xml
+  traits:
+    builder:
+      baseImage: host.docker.internal:5000/qubership-base-image:4
+    cron:
+      fallback: true
+    mount:
+      configs:
+      - secret:command-secret
+status: {}
