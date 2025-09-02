@@ -1,0 +1,17 @@
+apiVersion: camel.apache.org/v1
+kind: IntegrationPlatform
+metadata:
+  name: camel-k
+  namespace: camel-k
+spec:
+  cluster: docker-desktop
+  build:
+    registry:
+      address: host.docker.internal:5000
+      organization: camel-k
+      insecure: true
+    maven:
+      settings:
+        configMapKeyRef:
+          key: settings.xml
+          name: maven-settings
