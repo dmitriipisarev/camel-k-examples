@@ -1,0 +1,23 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  annotations:
+    camel.apache.org/operator.id: camel-k
+  creationTimestamp: null
+  name: storing-routes-in-configmap
+spec:
+  sources:
+    - contentRef: configmapname
+      contentKey: route1
+      name: route1.xml
+    - contentRef: configmapname
+      contentKey: route2
+      name: route2.xml  
+  traits:
+    cron:
+      fallback: true
+    mount:
+      configs:
+      - configmap:configmapname
+      hotReload: true
+status: {}
